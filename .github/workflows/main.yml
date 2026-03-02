@@ -1,20 +1,24 @@
-name: Auto Commit
+name: Daily Commit
 
 on:
   schedule:
-    - cron: "0 15 * * *"
-
+    - cron: "0 12 * * *"
   workflow_dispatch:
 
 jobs:
   commit:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Run commit script
+      - uses: actions/checkout@v4
+
+      - name: Update file
         run: |
-          git config --global user.email "simaocampanico.dev@gmail.com"
-          git config --global user.name "txger."
-          git commit --allow-empty -m "Oops a commit `date +'%Y-%m-%d %H:%M:%S'`" 
-          git push origin main
+          echo "Last Update: $(date)" > daily.txt
+
+      - name: Commit changes
+        run: |
+          git config user.name "txger."
+          git config user.email "simaocampanico.dev@gmail.com"
+          git add daily.txt
+          git commit -m "New commit at private repository" || echo "Nothing to commit"
+          git push
