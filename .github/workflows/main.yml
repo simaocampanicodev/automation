@@ -1,0 +1,20 @@
+name: Auto Commit
+
+on:
+  schedule:
+    - cron: "0 15 * * *"
+
+  workflow_dispatch:
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run commit script
+        run: |
+          git config --global user.email "simaocampanico.dev@gmail.com"
+          git config --global user.name "txger."
+          git commit --allow-empty -m "Oops a commit `date +'%Y-%m-%d %H:%M:%S'`" 
+          git push origin main
